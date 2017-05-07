@@ -13,8 +13,10 @@ describe('extractVariable', () => {
 
     it('returns range of lines and source code with extracted variable', () => {
       const charRange = [20, 25]
-      const { refactoredCode } = refactor.extractVariableFromRange(sourceCode, charRange, 'varName')
+      const { lines, refactoredCode }
+        = refactor.extractVariableFromRange(sourceCode, charRange, 'varName')
       expect(refactoredCode).to.equal('const varName = a + b;\ndoImportantStuff(1, varName);')
+      expect(lines).to.eql({ start: 1, end: 1 })
     })
   })
 })
