@@ -10,10 +10,16 @@ function! ExtractVariable()
   let end = line2byte(line("'>")) + col("'>") - 2
 
   let output = system("./node_modules/.bin/babel-node ./bin/jsr.js ".start." ".end." foo", bufnr('%'))
-  %delete _
-  put =output
+  let changes = json_decode(output)
+  0put =output
+  " let newStart = changes.lines.start
+  " let newEnd = changes.lines.end
+  " execute newStart.",".newEnd."delete _"
+  " execute newStart."put =changes.code"
+
+  " %delete _
+  " put =output
   " let @c
-  " let changes = split(output, "\n")
 
   " let @c = changes[1]
   " execute changes[0]."delete _"

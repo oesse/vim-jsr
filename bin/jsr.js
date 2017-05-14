@@ -12,7 +12,9 @@ process.stdin.on('readable', function() {
 
 process.stdin.on('end', function () {
   const [,, start, end, varName] = process.argv
-  const { refactoredCode } = refactor.extractVariableFromRange(data, [start, end], varName)
-  console.log(refactoredCode)
+  const { lines, changeLocation } = refactor.extractVariableFromRange(data, [start, end], varName)
+  console.log(JSON.stringify({ lines, code: changeLocation }))
+  // console.log(lines.start, lines.end)
+  // console.log(changeLocation)
 })
 
