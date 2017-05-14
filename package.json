@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "jsr": "./bin/jsr.js"
+  },
   "scripts": {
     "build": "babel src -d lib",
     "lint": "eslint ./lib",

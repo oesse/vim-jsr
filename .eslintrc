@@ -1,7 +1,8 @@
 {
-    "extends": "standard",
-    "plugins": [
-        "standard",
-        "promise"
-    ]
+  "env": ["mocha"],
+  "extends": "standard",
+  "plugins": [
+    "standard",
+    "promise"
+  ]
 }

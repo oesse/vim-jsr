@@ -1,8 +1,3 @@
-import * as acorn from 'acorn'
-import escodegen from 'escodegen'
-import fs from 'fs'
-import path from 'path'
-
 import { extractVariableFromRange } from '../src'
 
 import { expect } from 'chai'
@@ -17,6 +12,18 @@ describe('extractVariableFromRange', () => {
 
       expect(diff1).to.eql({ line: [1, 1], column: [20, 25], code: 'varName' })
       expect(diff2).to.eql({ line: [1, 1], column: [0, 0], code: 'const varName = a + b\n' })
+    })
+  })
+
+  context('with expression inside function', () => {
+    const sourceCode = 'function hello () {\n  doImportantStuff(1, a + b)\n}'
+    const charRange = [42, 47]
+
+    it('returns change sets defining const variable with expression from range', () => {
+      const [ diff1, diff2 ] = extractVariableFromRange(sourceCode, charRange, 'varName')
+
+      expect(diff1).to.eql({ line: [2, 2], column: [22, 27], code: 'varName' })
+      expect(diff2).to.eql({ line: [2, 2], column: [2, 2], code: 'const varName = a + b\n' })
     })
   })
 })
