@@ -14,11 +14,19 @@ function! ApplyChange(change)
 endfunction
 
 function! ExtractVariable()
+  call inputsave()
+  let var_name = input('Variable name: ')
+  call inputrestore()
+
+  if var_name ==# ''
+    return
+  endif
+
   " 0 offset (row - 1, col - 1)
   let start = line2byte(line("'<")) + col("'<") - 2
   let end = line2byte(line("'>")) + col("'>") - 2
 
-  let output = system("./node_modules/.bin/babel-node ./bin/jsr.js ".start." ".end." foo", bufnr('%'))
+  let output = system("./bin/jsr.js ".start." ".end." ".var_name, bufnr('%'))
   let changes = json_decode(output)
   let pos = getcurpos()
 
