@@ -22,8 +22,12 @@ describe('extractVariableFromRange', () => {
     it('puts variable declaration just before usage', () => {
       const [ diff1, diff2 ] = extractVariableFromRange(sourceCode, charRange, 'varName')
 
-      expect(diff1).to.eql({ line: [2, 2], column: [22, 27], code: 'varName' })
-      expect(diff2).to.eql({ line: [2, 2], column: [2, 2], code: 'const varName = a + b\n' })
+      expect(diff1).to.eql({
+        line: [2, 2],
+        column: [22, 27],
+        code: 'varName'
+      })
+      expect(diff2).to.eql({ line: [2, 2], column: [2, 2], code: 'const varName = a + b\n  ' })
     })
   })
 })

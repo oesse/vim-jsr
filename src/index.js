@@ -40,6 +40,9 @@ export function extractVariableFromRange (sourceCode, charRange, varName) {
 
   const exprLocation = stack[0].loc
 
+  const varDeclaration =`const ${varName} = ${sourceCode.substring(stack[0].start, stack[0].end)}\n`
+  const paddedVarDeclaration = varDeclaration + ' '.repeat(attachedAt.loc.start.column)
+
   return [
     {
       line: [exprLocation.start.line, exprLocation.end.line],
@@ -47,9 +50,9 @@ export function extractVariableFromRange (sourceCode, charRange, varName) {
       code: varName
     },
     {
-      line: [attachedAt.loc.start.line, attachedAt.loc.end.line],
+      line: [attachedAt.loc.start.line, attachedAt.loc.start.line],
       column: [attachedAt.loc.start.column, attachedAt.loc.start.column],
-      code: `const ${varName} = ${sourceCode.substring(stack[0].start, stack[0].end)}\n`
+      code: paddedVarDeclaration
     }
   ]
 }

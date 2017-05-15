@@ -1,19 +1,28 @@
 " binding to source this file
 let g:jsr_map_leader = '<leader>r'
 nnoremap <leader>j :source vim/ftplugin/javascript.vim<cr>
-execute "nnoremap ".g:jsr_map_leader."v :call ExtractVariableAtCursor()<cr>"
-execute "vnoremap ".g:jsr_map_leader."v :call ExtractVariableInRange()<cr>"
+execute "nnoremap ".g:jsr_map_leader."v :ExtractVariableAtCursor<cr>"
+execute "vnoremap ".g:jsr_map_leader."v :ExtractVariableInRange<cr>"
 
-function! ApplyChange(change)
-  let chars = a:change.column[1] - a:change.column[0]
-  if chars > 0
-    execute a:change.line[0]."normal! ".a:change.column[0]."lc".chars."l".a:change.code
-  else
-    execute a:change.line[0]."normal! ".a:change.column[0]."li".a:change.code
-  endif
+command! ExtractVariableAtCursor call s:ExtractVariableAtCursor()
+command! ExtractVariableInRange call s:ExtractVariableInRange()
+
+function! s:ApplyChange(change)
+  let line_start = a:change.line[0]
+  let line_end =  a:change.line[1]
+  let column_start = a:change.column[0]
+  let column_end = a:change.column[1]
+
+
+  let first = getline(line_start)
+  let last = getline(line_end)
+  silent execute line_start.",".line_end."delete _"
+
+  let rest = strpart(first, 0, column_start) . a:change.code . strpart(last, column_end)
+  silent execute line_start."put! =rest"
 endfunction
 
-function! ExtractVariable(start, end)
+function! s:ExtractVariable(start, end)
   call inputsave()
   let var_name = input('Variable name: ')
   call inputrestore()
@@ -27,29 +36,29 @@ function! ExtractVariable(start, end)
   let changes = json_decode(output)
   let pos = getcurpos()
 
-  " 0put =output
-  call ApplyChange(changes[0])
-  call ApplyChange(changes[1])
+  call s:ApplyChange(changes[0])
+  call s:ApplyChange(changes[1])
+  $put =output
 
   call setpos('.', pos)
 endfunction
 
-function! GetOffset(expr)
+function! s:GetOffset(expr)
   " 0 offset (row - 1, col - 1)
   return line2byte(line(a:expr)) + col(a:expr) - 2
 endfunction
 
-function! ExtractVariableAtCursor()
+function! s:ExtractVariableAtCursor()
   let start = GetOffset('.')
   let end = start
-  call ExtractVariable(start, end)
+  call s:ExtractVariable(start, end)
 endfunction
 
-function! ExtractVariableInRange()
+function! s:ExtractVariableInRange()
   " 0 offset (row - 1, col - 1)
   let start = GetOffset("'<")
   let end = GetOffset("'>")
-  call ExtractVariable(start, end)
+  call s:ExtractVariable(start, end)
 endfunction
 
 echom "Sourced js-refactor."
