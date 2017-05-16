@@ -22,6 +22,10 @@ function! s:ApplyChange(change)
   silent execute line_start."put! =rest"
 endfunction
 
+function! s:CountLines(str)
+  return len(split(a:str, "\n"))-1
+endfunction
+
 function! s:ExtractVariable(start, end)
   call inputsave()
   let var_name = input('Variable name: ')
@@ -36,9 +40,16 @@ function! s:ExtractVariable(start, end)
   let changes = json_decode(output)
   let pos = getcurpos()
 
-  for change in changes
-    call s:ApplyChange(change)
-  endfor
+  " Extract expression
+  call s:ApplyChange(changes[0])
+  let pos[1] = changes[0].line[0]
+  let pos[4] = changes[0].line[0]
+  let pos[2] = changes[0].column[0] + 1
+
+  " Insert var declaration
+  call s:ApplyChange(changes[1])
+  let pos_offset = s:CountLines(changes[1].code)
+  let pos[1] += pos_offset
 
   call setpos('.', pos)
 endfunction
