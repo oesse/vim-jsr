@@ -36,9 +36,9 @@ function! s:ExtractVariable(start, end)
   let changes = json_decode(output)
   let pos = getcurpos()
 
-  call s:ApplyChange(changes[0])
-  call s:ApplyChange(changes[1])
-  $put =output
+  for change in changes
+    call s:ApplyChange(change)
+  endfor
 
   call setpos('.', pos)
 endfunction
@@ -49,15 +49,15 @@ function! s:GetOffset(expr)
 endfunction
 
 function! s:ExtractVariableAtCursor()
-  let start = GetOffset('.')
+  let start = s:GetOffset('.')
   let end = start
   call s:ExtractVariable(start, end)
 endfunction
 
 function! s:ExtractVariableInRange()
   " 0 offset (row - 1, col - 1)
-  let start = GetOffset("'<")
-  let end = GetOffset("'>")
+  let start = s:GetOffset("'<")
+  let end = s:GetOffset("'>")
   call s:ExtractVariable(start, end)
 endfunction
 
