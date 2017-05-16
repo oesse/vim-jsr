@@ -5,7 +5,7 @@ execute "nnoremap ".g:jsr_map_leader."v :ExtractVariableAtCursor<cr>"
 execute "vnoremap ".g:jsr_map_leader."v :ExtractVariableInRange<cr>"
 
 command! ExtractVariableAtCursor call s:ExtractVariableAtCursor()
-command! ExtractVariableInRange call s:ExtractVariableInRange()
+command! -range ExtractVariableInRange call s:ExtractVariableInRange()
 
 function! s:ApplyChange(change)
   let line_start = a:change.line[0]
