@@ -1,6 +1,8 @@
 " binding to source this file
-let g:jsr_map_leader = '<leader>r'
-nnoremap <leader>j :source vim/ftplugin/javascript.vim<cr>
+if !exists('g:jsr_map_leader')
+  let g:jsr_map_leader = '<leader>r'
+endif
+
 execute "nnoremap ".g:jsr_map_leader."v :ExtractVariableAtCursor<cr>"
 execute "vnoremap ".g:jsr_map_leader."v :ExtractVariableInRange<cr>"
 
@@ -8,8 +10,9 @@ command! ExtractVariableAtCursor call s:ExtractVariableAtCursor()
 command! -range ExtractVariableInRange call s:ExtractVariableInRange()
 
 let s:jsr_debug = 0
-let s:plugin_path = expand('<sfile>:p:h')
-let s:jsr_path = resolve(s:plugin_path . '/../../bin/jsr.js')
+let s:this_file = expand('<sfile>:p')
+let s:plugin_path = resolve(fnamemodify(s:this_file, ':h').'/../..')
+let s:jsr_path = s:plugin_path . '/bin/jsr.js'
 
 function! s:ApplyChange(change)
   let line_start = a:change.line[0]
@@ -77,5 +80,6 @@ function! s:ExtractVariableInRange()
 endfunction
 
 if s:jsr_debug
-  echom "Sourced ".s:jsr_path
+  execute "nnoremap <leader>j :source ".s:this_file."<cr>"
+  echom "Sourced ".s:this_file
 endif
