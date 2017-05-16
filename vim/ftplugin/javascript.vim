@@ -7,6 +7,10 @@ execute "vnoremap ".g:jsr_map_leader."v :ExtractVariableInRange<cr>"
 command! ExtractVariableAtCursor call s:ExtractVariableAtCursor()
 command! -range ExtractVariableInRange call s:ExtractVariableInRange()
 
+let s:jsr_debug = 0
+let s:plugin_path = expand('<sfile>:p:h')
+let s:jsr_path = resolve(s:plugin_path . '/../../bin/jsr.js')
+
 function! s:ApplyChange(change)
   let line_start = a:change.line[0]
   let line_end =  a:change.line[1]
@@ -36,7 +40,7 @@ function! s:ExtractVariable(start, end)
   endif
 
 
-  let output = system("./bin/jsr.js ".a:start." ".a:end." ".var_name, bufnr('%'))
+  let output = system(s:jsr_path." ".a:start." ".a:end." ".var_name, bufnr('%'))
   let changes = json_decode(output)
   let pos = getcurpos()
 
@@ -72,4 +76,6 @@ function! s:ExtractVariableInRange()
   call s:ExtractVariable(start, end)
 endfunction
 
-echom "Sourced js-refactor."
+if s:jsr_debug
+  echom "Sourced ".s:jsr_path
+endif
