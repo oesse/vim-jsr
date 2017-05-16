@@ -10,7 +10,8 @@
     "build": "babel src -d lib",
     "lint": "eslint ./lib",
     "lintfix": "eslint --fix ./lib",
-    "test": "mocha --compilers js:babel-core/register"
+    "postinstall": "npm run build",
+    "test": "mocha"
   },
   "keywords": [],
   "author": "",
