@@ -56,3 +56,16 @@ Expect javascript (variable extracted):
     return foo.toString()
   }
 
+Given javascript (method call):
+  function f () {
+    return abc.def(123).toString()
+  }
+
+Do (move cursor to method):
+  jfd\rv
+
+Expect javascript (object and method extracted to variable):
+  function f () {
+    const foo = abc.def
+    return foo(123).toString()
+  }
