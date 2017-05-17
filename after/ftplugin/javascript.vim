@@ -1,15 +1,19 @@
 " binding to source this file
+if !exists('g:jsr_loaded')
+  let g:jsr_loaded = 1
+endif
+
 if !exists('g:jsr_map_leader')
   let g:jsr_map_leader = '<leader>r'
 endif
 
-execute "nnoremap ".g:jsr_map_leader."v :ExtractVariableAtCursor<cr>"
-execute "vnoremap ".g:jsr_map_leader."v :ExtractVariableInRange<cr>"
+execute "nnoremap <buffer> ".g:jsr_map_leader."v :ExtractVariableAtCursor<cr>"
+execute "vnoremap <buffer> ".g:jsr_map_leader."v :ExtractVariableInRange<cr>"
 
-command! ExtractVariableAtCursor call s:ExtractVariableAtCursor()
-command! -range ExtractVariableInRange call s:ExtractVariableInRange()
+command! -buffer -nargs=? ExtractVariableAtCursor call s:ExtractVariableAtCursor(<f-args>)
+command! -buffer -nargs=? -range ExtractVariableInRange call s:ExtractVariableInRange(<f-args>)
 
-let s:jsr_debug = 0
+let s:jsr_debug = 1
 let s:this_file = expand('<sfile>:p')
 let s:plugin_path = resolve(fnamemodify(s:this_file, ':h').'/../..')
 let s:jsr_path = s:plugin_path . '/bin/jsr.js'
@@ -23,27 +27,32 @@ function! s:ApplyChange(change)
 
   let first = getline(line_start)
   let last = getline(line_end)
+
+  let is_last_in_buffer = line_end == line("$")
+
   silent execute line_start.",".line_end."delete _"
 
   let rest = strpart(first, 0, column_start) . a:change.code . strpart(last, column_end)
-  silent execute line_start."put! =rest"
+  let put_cmd = line_start."put! =rest"
+  if is_last_in_buffer
+    let put_cmd = "$put =rest"
+  endif
+  silent execute put_cmd
 endfunction
 
 function! s:CountLines(str)
   return len(split(a:str, "\n"))-1
 endfunction
 
-function! s:ExtractVariable(start, end)
-  call inputsave()
-  let var_name = input('Variable name: ')
-  call inputrestore()
+function! s:ExtractVariable(start, end, variable_name)
 
-  if var_name ==# ''
+  " Invalid/empty variable name provided.
+  if a:variable_name ==# ''
     return
   endif
 
 
-  let output = system(s:jsr_path." ".a:start." ".a:end." ".var_name, bufnr('%'))
+  let output = system(s:jsr_path." ".a:start." ".a:end." ".a:variable_name, bufnr('%'))
   let changes = json_decode(output)
   let pos = getcurpos()
 
@@ -66,17 +75,30 @@ function! s:GetOffset(expr)
   return line2byte(line(a:expr)) + col(a:expr) - 2
 endfunction
 
-function! s:ExtractVariableAtCursor()
+function! s:ExtractVariableAtCursor(...)
   let start = s:GetOffset('.')
   let end = start
-  call s:ExtractVariable(start, end)
+  if a:0 == 1
+    let variable_name = a:1
+  else
+    call inputsave()
+    let variable_name = input('Variable name: ')
+    call inputrestore()
+  endif
+  call s:ExtractVariable(start, end, variable_name)
 endfunction
 
-function! s:ExtractVariableInRange()
-  " 0 offset (row - 1, col - 1)
+function! s:ExtractVariableInRange(...)
   let start = s:GetOffset("'<")
   let end = s:GetOffset("'>")
-  call s:ExtractVariable(start, end)
+  if a:0 == 1
+    let variable_name = a:1
+  else
+    call inputsave()
+    let variable_name = input('Variable name: ')
+    call inputrestore()
+  endif
+  call s:ExtractVariable(start, end, variable_name)
 endfunction
 
 if s:jsr_debug

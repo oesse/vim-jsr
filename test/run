@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+vim -Nu <(cat << EOF
+filetype off
+set rtp+=~/.vim/plugged/vader.vim
+set rtp+=./after
+filetype plugin indent on
+syntax enable
+EOF
+) '+Vader! **/*.vader'

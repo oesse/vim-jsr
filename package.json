@@ -1,8 +1,8 @@
 {
-  "name": "js-refactor",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "vim-jsr",
+  "version": "1.0.0-alpha",
+  "description": "Refactorings for javascript in vim",
+  "main": "lib",
   "bin": {
     "jsr": "./bin/jsr.js"
   },
@@ -13,9 +13,9 @@
     "postinstall": "npm run build",
     "test": "mocha"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Oliver Esser",
   "license": "ISC",
+  "repository": "oesse/vim-jsr",
   "dependencies": {
     "acorn": "^5.0.3",
     "escodegen": "^1.8.1"

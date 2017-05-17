@@ -1,0 +1,58 @@
+# Test case
+Execute (setup mapping):
+  let g:jsr_map_leader = '\jsr'
+  nnoremap <buffer> \rv :ExtractVariableAtCursor foo<cr>
+  vnoremap <buffer> \rv :<c-u>ExtractVariableInRange foo<cr>
+
+Given javascript (function with expression in arguments):
+  doSomethingSpecial(a, b + c)
+
+Do (run extract variable on + sign):
+  f+\rv
+
+Expect javascript (variable extracted):
+  const foo = b + c
+  doSomethingSpecial(a, foo)
+
+Given javascript (multiline arguments):
+  doSomethingSpecial({
+    x: 'x',
+  })
+
+Do (run extract variable on x):
+  jfx\rv
+
+Expect javascript (variable extracted):
+  const foo = {
+    x: 'x',
+  }
+  doSomethingSpecial(foo)
+
+Given javascript (in function body):
+  function bar() {
+    doSomethingSpecial(a, b + c)
+  }
+
+Do (run extract variable on x):
+  jf+\rv
+
+Expect javascript (variable extracted):
+  function bar() {
+    const foo = b + c
+    doSomethingSpecial(a, foo)
+  }
+
+Given javascript (extract object calling function):
+  function f () {
+    return abc(123).toString()
+  }
+
+Do (extract variable with function call selected):
+  jfavt.\rv
+
+Expect javascript (variable extracted):
+  function f () {
+    const foo = abc(123)
+    return foo.toString()
+  }
+
