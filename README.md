@@ -1,4 +1,5 @@
 # vim-jsr
+[![Build Status](https://travis-ci.org/oesse/vim-jsr.svg?branch=master)](https://travis-ci.org/oesse/vim-jsr)
 Refactorings for javascript in vim.
 
 ### Installation

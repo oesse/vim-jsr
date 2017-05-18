@@ -3,6 +3,7 @@ node_js:
   - 6
 
 before_install:
+  - sudo add-apt-repository ppa:jonathonf/vim -y
   - sudo apt-get -qq update
   - sudo apt-get install -y vim
   - vim --version
