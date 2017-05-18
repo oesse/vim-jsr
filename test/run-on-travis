@@ -2,7 +2,7 @@
 cd "$(dirname "$0")/.."
 vim -Nu <(cat << EOF
 filetype off
-set rtp+=~/.vim/plugged/vader.vim
+set rtp+=./vader.vim
 set rtp+=.
 filetype plugin indent on
 syntax enable
