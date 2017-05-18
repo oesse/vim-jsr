@@ -41,12 +41,18 @@ function! s:ExtractVariable(start, end, variable_name)
   endif
 
   let output = system(s:jsr_path." ".a:start." ".a:end." ".a:variable_name, bufnr('%'))
-  if matchstr(output, "Error: Cannot find module '../lib/cli'") != ""
+  if output =~ "Error: Cannot find module '../lib/cli'"
     echoerr "You must initialize vim-jsr by running 'npm install'!"
     return
   endif
 
-  let changes = json_decode(output)
+  try
+    let changes = json_decode(output)
+  catch /^Vim\%((\a\+)\)\=:E474/
+    echoerr "Cannot extract variable from this point"
+    return
+  endtry
+
   let pos = getcurpos()
 
   " Extract expression

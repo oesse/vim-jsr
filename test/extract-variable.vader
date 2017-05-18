@@ -70,3 +70,13 @@ Expect javascript (object and method extracted to variable):
     const foo = abc.def
     return foo(123).toString()
   }
+
+Given javascript (invalid syntax):
+  invalid syntax
+
+Execute (extract variable gives error):
+  AssertThrows normal \rv
+  Assert g:vader_exception =~ "Cannot extract variable from this point"
+
+Expect javascript (nothing changed):
+  invalid syntax
