@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - 6
+
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y vim
+  - vim --version
+
+before_script:
+  - git clone https://github.com/junegunn/vader.vim.git
+
+script:
+  - npm test
+  - ./test/run
