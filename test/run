@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
+# SCRIPTPATH=$( cd "$(dirname "$0")" ; pwd -P )
+# echo $SCRIPTPATH
+cd "$(dirname "$0")"
 vim -Nu <(cat << EOF
 filetype off
 set rtp+=~/.vim/plugged/vader.vim
-set rtp+=./after
+set rtp+=../
 filetype plugin indent on
 syntax enable
 EOF
