@@ -2,11 +2,19 @@ language: node_js
 node_js:
   - 6
 
-before_install:
-  - sudo add-apt-repository ppa:jonathonf/vim -y
-  - sudo apt-get -qq update
-  - sudo apt-get install -y vim
-  - vim --version
+env:
+  global:
+    - DEPS=$HOME/deps
+    - PATH=$DEPS/bin:$PATH
+
+before_install: |
+  git clone --depth 1 https://github.com/vim/vim
+  cd vim
+  ./configure --prefix=$DEPS --with-features=huge --disable-gui
+  make
+  make install
+  vim --version
+  cd -
 
 before_script:
   - git clone https://github.com/junegunn/vader.vim.git
