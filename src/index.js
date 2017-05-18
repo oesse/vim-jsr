@@ -36,11 +36,11 @@ export function extractVariableFromRange (sourceCode, charRange, varName) {
   const [start, end] = charRange
   const stack = nodeStackOfExpression(parse(sourceCode), start, end)
   const enclIdx = stack.findIndex(node => !!node.body)
-  const attachedAt = stack[enclIdx].body.find(node => node === stack[enclIdx-1])
+  const attachedAt = stack[enclIdx].body.find(node => node === stack[enclIdx - 1])
 
   const exprLocation = stack[0].loc
 
-  const varDeclaration =`const ${varName} = ${sourceCode.substring(stack[0].start, stack[0].end)}\n`
+  const varDeclaration = `const ${varName} = ${sourceCode.substring(stack[0].start, stack[0].end)}\n`
   const paddedVarDeclaration = varDeclaration + ' '.repeat(attachedAt.loc.start.column)
 
   return [

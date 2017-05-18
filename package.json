@@ -8,8 +8,8 @@
   },
   "scripts": {
     "build": "babel src -d lib",
-    "lint": "eslint ./lib",
-    "lintfix": "eslint --fix ./lib",
+    "lint": "eslint ./src",
+    "lintfix": "eslint --fix ./src",
     "postinstall": "npm run build",
     "test": "mocha"
   },
@@ -33,6 +33,6 @@
     "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
-    "mocha": "^3.3.0"
+    "mocha": "^3.4.1"
   }
 }
