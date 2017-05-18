@@ -1,7 +1,6 @@
 " binding to source this file
-if !exists('g:jsr_loaded')
-  let g:jsr_loaded = 1
-endif
+if exists('g:loaded_jsr') | finish | endif
+let g:jsr_loaded = 1
 
 if !exists('g:jsr_map_leader')
   let g:jsr_map_leader = '<leader>r'
@@ -53,6 +52,11 @@ function! s:ExtractVariable(start, end, variable_name)
 
 
   let output = system(s:jsr_path." ".a:start." ".a:end." ".a:variable_name, bufnr('%'))
+  if matchstr(output, "Error: Cannot find module '../lib/cli'") != ""
+    echoerr "You must initialize vim-jsr by running 'npm install'!"
+    return
+  endif
+
   let changes = json_decode(output)
   let pos = getcurpos()
 
