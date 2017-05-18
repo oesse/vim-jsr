@@ -29,34 +29,12 @@ function! jsr#ExtractVariableInRange(...)
   call s:ExtractVariable(start, end, variable_name)
 endfunction
 
-function! s:ApplyChange(change)
-  let line_start = a:change.line[0]
-  let line_end =  a:change.line[1]
-  let column_start = a:change.column[0]
-  let column_end = a:change.column[1]
-
-
-  let first = getline(line_start)
-  let last = getline(line_end)
-
-  let is_last_in_buffer = line_end == line("$")
-
-  silent execute line_start.",".line_end."delete _"
-
-  let rest = strpart(first, 0, column_start) . a:change.code . strpart(last, column_end)
-  let put_cmd = line_start."put! =rest"
-  if is_last_in_buffer
-    let put_cmd = "$put =rest"
-  endif
-  silent execute put_cmd
-endfunction
-
-function! s:CountLines(str)
-  return len(split(a:str, "\n"))-1
+function! s:GetOffset(expr)
+  " 0 offset (row - 1, col - 1)
+  return line2byte(line(a:expr)) + col(a:expr) - 2
 endfunction
 
 function! s:ExtractVariable(start, end, variable_name)
-
   " Invalid/empty variable name provided.
   if a:variable_name ==# ''
     return
@@ -85,7 +63,29 @@ function! s:ExtractVariable(start, end, variable_name)
   call setpos('.', pos)
 endfunction
 
-function! s:GetOffset(expr)
-  " 0 offset (row - 1, col - 1)
-  return line2byte(line(a:expr)) + col(a:expr) - 2
+function! s:ApplyChange(change)
+  let line_start = a:change.line[0]
+  let line_end =  a:change.line[1]
+  let column_start = a:change.column[0]
+  let column_end = a:change.column[1]
+
+
+  let first = getline(line_start)
+  let last = getline(line_end)
+
+  let is_last_in_buffer = line_end == line("$")
+
+  silent execute line_start.",".line_end."delete _"
+
+  let rest = strpart(first, 0, column_start) . a:change.code . strpart(last, column_end)
+  let put_cmd = line_start."put! =rest"
+  if is_last_in_buffer
+    let put_cmd = "$put =rest"
+  endif
+  silent execute put_cmd
 endfunction
+
+function! s:CountLines(str)
+  return len(split(a:str, "\n"))-1
+endfunction
+
