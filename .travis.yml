@@ -6,11 +6,9 @@ env:
   global:
     - DEPS=$HOME/deps
     - PATH=$DEPS/bin:$PATH
-
-matrix:
-  include:
-    - env: ENV=neovim
-    - env: ENV=vim8
+  matrix:
+    - ENV=neovim
+    - ENV=vim8
 
 before_install: |
   if [ "$ENV" == "neovim" ]; then
