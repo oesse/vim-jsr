@@ -40,7 +40,8 @@ function! s:ExtractVariable(start, end, variable_name)
     return
   endif
 
-  let output = system(s:jsr_path." ".a:start." ".a:end." ".a:variable_name, bufnr('%'))
+  let cmd = s:jsr_path." ".a:start." ".a:end." ".a:variable_name
+  let output = system(cmd, getline(1, line("$")))
   if output =~ "Error: Cannot find module '../lib/cli'"
     echoerr "You must initialize vim-jsr by running 'npm install'!"
     return

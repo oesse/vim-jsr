@@ -1,10 +1,13 @@
 # vim-jsr
 [![Build Status](https://travis-ci.org/oesse/vim-jsr.svg?branch=master)](https://travis-ci.org/oesse/vim-jsr)
+
 Refactorings for javascript in vim.
 
 ### Installation
 
-Tested with Vim 8 and Node 7.
+Requirements:
+* Vim 8 or NeoVim v0.2.0
+* Node 6
 
 ###### with [vim-plug](https://github.com/junegunn/vim-plug)
 ```vim
