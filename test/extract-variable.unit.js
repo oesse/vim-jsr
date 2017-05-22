@@ -1,5 +1,4 @@
 import { extractVariableFromRange } from '../src'
-
 import { expect } from 'chai'
 
 describe('extractVariableFromRange', () => {
@@ -25,6 +24,22 @@ describe('extractVariableFromRange', () => {
       expect(diff1).to.eql({
         line: [2, 2],
         column: [22, 27],
+        code: 'varName'
+      })
+      expect(diff2).to.eql({ line: [2, 2], column: [2, 2], code: 'const varName = a + b\n  ' })
+    })
+  })
+
+  context('with expression inside async function', () => {
+    const sourceCode = 'async function hello () {\n  await doImportantStuff(1, a + b)\n}'
+    const charRange = [54, 59]
+
+    it('puts variable declaration just before usage', () => {
+      const [ diff1, diff2 ] = extractVariableFromRange(sourceCode, charRange, 'varName')
+
+      expect(diff1).to.eql({
+        line: [2, 2],
+        column: [28, 33],
         code: 'varName'
       })
       expect(diff2).to.eql({ line: [2, 2], column: [2, 2], code: 'const varName = a + b\n  ' })

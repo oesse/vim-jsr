@@ -1,5 +1,8 @@
 import * as walk from 'acorn/dist/walk'
 import * as acorn from 'acorn'
+import acornEs7Plugin from 'acorn-es7-plugin'
+
+acornEs7Plugin(acorn)
 
 function nodeStackOfExpression (ast, start, end) {
   const makeVisitor = (nodeTypes, start, end) => {
@@ -28,7 +31,12 @@ function nodeStackOfExpression (ast, start, end) {
 }
 
 export function parse (sourceCode) {
-  const ast = acorn.parse(sourceCode, { locations: true, sourceType: 'module' })
+  const ast = acorn.parse(sourceCode, {
+    locations: true,
+    sourceType: 'module',
+    plugins: { asyncawait: true },
+    ecmaVersion: 8
+  })
   return ast
 }
 
