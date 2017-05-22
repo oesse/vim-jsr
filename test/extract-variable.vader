@@ -71,6 +71,24 @@ Expect javascript (object and method extracted to variable):
     return foo(123).toString()
   }
 
+Given javascript (expression in async function):
+  async function f () {
+    await doit(bar + baz)
+  }
+
+Do (move cursor to operator in argument):
+  jf+\rv
+
+Expect javascript (object and method extracted to variable):
+  async function f () {
+    const foo = bar + baz
+    await doit(foo)
+  }
+
+Execute (extract variable gives error):
+  AssertThrows normal \rv
+  Assert g:vader_exception =~ "Cannot extract variable from this point"
+
 Given javascript (invalid syntax):
   invalid syntax
 
