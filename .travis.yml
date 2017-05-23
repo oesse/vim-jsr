@@ -32,5 +32,4 @@ before_script:
   - git clone https://github.com/junegunn/vader.vim.git
 
 script:
-  - npm test
   - ./test/run-on-travis
