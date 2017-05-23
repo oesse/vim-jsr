@@ -1,5 +1,5 @@
-# vim-jsr
-[![Build Status](https://travis-ci.org/oesse/vim-jsr.svg?branch=master)](https://travis-ci.org/oesse/vim-jsr)
+# vim-jsrf
+[![Build Status](https://travis-ci.org/oesse/vim-jsrf.svg?branch=master)](https://travis-ci.org/oesse/vim-jsrf)
 
 Refactorings for javascript in vim.
 
@@ -11,13 +11,13 @@ Requirements:
 
 ###### with [vim-plug](https://github.com/junegunn/vim-plug)
 ```vim
-Plug 'oesse/vim-jsr', { 'do': 'npm install' }
+Plug 'oesse/vim-jsrf', { 'do': 'npm install' }
 ```
 ###### with [pathogen](https://github.com/tpope/vim-pathogen)
 ```sh
 cd ~/.vim/bundle
-git clone git://github.com/oesse/vim-jsr.git
-cd vim-jsr && npm install
+git clone git://github.com/oesse/vim-jsrf.git
+cd vim-jsrf && npm install
 ```
 
 ### Usage

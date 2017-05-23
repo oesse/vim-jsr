@@ -1,6 +1,6 @@
 # Test case
 Before (setup mapping):
-  let g:jsr_map_leader = '\jsr'
+  let g:jsrf_map_leader = '\jsr'
   source after/ftplugin/javascript.vim
   nnoremap <buffer> \rv :ExtractVariableAtCursor foo<cr>
   vnoremap <buffer> \rv :<c-u>ExtractVariableInRange foo<cr>

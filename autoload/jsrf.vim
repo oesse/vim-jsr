@@ -1,9 +1,8 @@
-
 let s:this_file = expand('<sfile>:p')
 let s:plugin_path = resolve(expand('<sfile>:p:h:h'))
-let s:jsr_path = s:plugin_path . '/bin/jsr.js'
+let s:jsrf_path = s:plugin_path . '/node_modules/.bin/jsrf'
 
-function! jsr#ExtractVariableAtCursor(...)
+function! jsrf#ExtractVariableAtCursor(...)
   let start = s:GetOffset('.')
   let end = start
   if a:0 == 1
@@ -16,7 +15,7 @@ function! jsr#ExtractVariableAtCursor(...)
   call s:ExtractVariable(start, end, variable_name)
 endfunction
 
-function! jsr#ExtractVariableInRange(...)
+function! jsrf#ExtractVariableInRange(...)
   let start = s:GetOffset("'<")
   let end = s:GetOffset("'>")
   if a:0 == 1
@@ -40,10 +39,10 @@ function! s:ExtractVariable(start, end, variable_name)
     return
   endif
 
-  let cmd = s:jsr_path." ".a:start." ".a:end." ".a:variable_name
+  let cmd = s:jsrf_path." ".a:start." ".a:end." ".a:variable_name
   let output = system(cmd, getline(1, line("$")))
   if output =~ "Error: Cannot find module '../lib/cli'"
-    echoerr "You must initialize vim-jsr by running 'npm install'!"
+    echoerr "You must initialize vim-jsrf by running 'npm install'!"
     return
   endif
 
