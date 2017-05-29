@@ -39,7 +39,7 @@ function! s:ExtractVariable(start, end, variable_name)
     return
   endif
 
-  let cmd = s:jsrf_path." ".a:start." ".a:end." ".a:variable_name
+  let cmd = s:jsrf_path." extract-variable ".a:start." ".a:end." ".a:variable_name
   let output = system(cmd, getline(1, line("$")))
   if output =~ "Error: Cannot find module '../lib/cli'"
     echoerr "You must initialize vim-jsrf by running 'npm install'!"
