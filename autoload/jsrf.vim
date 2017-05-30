@@ -2,6 +2,43 @@ let s:this_file = expand('<sfile>:p')
 let s:plugin_path = resolve(expand('<sfile>:p:h:h'))
 let s:jsrf_path = s:plugin_path . '/node_modules/.bin/jsrf'
 
+function! jsrf#ExpandObjectAtCursor(...)
+  let start = s:GetOffset('.')
+  let end = start
+  call s:ExpandObject(start, end)
+endfunction
+
+function! jsrf#ExpandObjectInRange(...)
+  let start = s:GetOffset("'<")
+  let end = s:GetOffset("'>")
+  call s:ExpandObject(start, end)
+endfunction
+
+function! s:ExpandObject(start, end)
+  let cmd = s:jsrf_path." expand-object ".a:start." ".a:end
+  let output = system(cmd, getline(1, line("$")))
+  if output =~ "Error: Cannot find module '../lib/cli'"
+    echoerr "You must initialize vim-jsrf by running 'npm install'!"
+    return
+  endif
+
+  try
+    let changes = json_decode(output)
+  catch /^Vim\%((\a\+)\)\=:E474/
+    echoerr "Cannot extract variable from this point"
+    return
+  endtry
+
+  let pos = getcurpos()
+
+  call s:ApplyChange(changes[0])
+  let pos[1] = changes[0].line[0]
+  let pos[4] = changes[0].line[0]
+  let pos[2] = changes[0].column[0] + 1
+
+  call setpos('.', pos)
+endfunction
+
 function! jsrf#ExtractVariableAtCursor(...)
   let start = s:GetOffset('.')
   let end = start
@@ -89,9 +126,16 @@ function! s:ApplyChange(change)
     let put_cmd = "$put =rest"
   endif
   silent execute put_cmd
+
+  " only one line, delete doesnt delete only line of buffer
+  if is_last_in_buffer && line_start == 1
+    " delete it afterwards
+    silent! execute "1,1 delete _"
+  endif
 endfunction
 
 function! s:CountLines(str)
   return len(split(a:str, "\n"))-1
 endfunction
+
 
