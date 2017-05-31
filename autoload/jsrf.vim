@@ -91,19 +91,14 @@ function! s:ExtractVariable(start, end, variable_name)
   endtry
 
   let pos = getcurpos()
+  let new_pos = pos
 
-  " Extract expression
-  call s:ApplyChange(changes[0])
-  let pos[1] = changes[0].line[0]
-  let pos[4] = changes[0].line[0]
-  let pos[2] = changes[0].column[0] + 1
+  for change in changes
+    call s:ApplyChange(change)
+    call s:AdjustedCursorPosition(pos, change, new_pos)
+  endfor
 
-  " Insert var declaration
-  call s:ApplyChange(changes[1])
-  let pos_offset = s:CountLines(changes[1].code)
-  let pos[1] += pos_offset
-
-  call setpos('.', pos)
+  call setpos('.', new_pos)
 endfunction
 
 function! s:ApplyChange(change)
@@ -132,6 +127,27 @@ function! s:ApplyChange(change)
     " delete it afterwards
     silent! execute "1,1 delete _"
   endif
+endfunction
+
+function! s:AdjustedCursorPosition(pos, change, new_pos)
+  let [line_start, line_end] = a:change.line
+  let [col_start, col_end] = a:change.column
+
+  if line_end < a:pos[1]
+    let change_lines = s:CountLines(a:change.code)
+    let line_difference = change_lines - (line_end - line_start)
+    let a:new_pos[1] += line_difference
+    return
+  elseif line_start <= a:pos[1] && a:pos[1] <= line_end
+    let new_line = a:pos[1] - line_start + 1
+    let new_column = col_start - a:pos[2] + 1
+    let a:new_pos[1] += new_line
+    let a:new_pos[2] += new_column
+    let a:new_pos[4] += new_column
+    return
+  endif
+
+  " Do nothing, when change is after cursor position
 endfunction
 
 function! s:CountLines(str)
