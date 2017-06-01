@@ -10,9 +10,19 @@ acorn@^5.0.3:
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.0.3.tgz#c460df08491463f028ccb82eab3730bf01087b3d"
 
-jsrf@^1.0.0-alpha.0:
-  version "1.0.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/jsrf/-/jsrf-1.0.0-alpha.0.tgz#1b92c163e34aea7d7672cc40c0464aa10e370480"
+babel-regenerator-runtime@^6.5.0:
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/babel-regenerator-runtime/-/babel-regenerator-runtime-6.5.0.tgz#0e41cd1c9f80442466f015c749fff8ba98f8e110"
+
+bluebird@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
+
+jsrf@^1.0.0-alpha.2:
+  version "1.0.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/jsrf/-/jsrf-1.0.0-alpha.2.tgz#77a0e0693f55f1922efbc6963f03fe4e48109d74"
   dependencies:
     acorn "^5.0.3"
     acorn-es7-plugin "^1.1.7"
+    babel-regenerator-runtime "^6.5.0"
+    bluebird "^3.5.0"
