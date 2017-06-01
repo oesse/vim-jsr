@@ -5,38 +5,13 @@ let s:jsrf_path = s:plugin_path . '/node_modules/.bin/jsrf'
 function! jsrf#ExpandObjectAtCursor(...)
   let start = s:GetOffset('.')
   let end = start
-  call s:ExpandObject(start, end)
+  call s:Jsrf("expand-object", start, end, '')
 endfunction
 
 function! jsrf#ExpandObjectInRange(...)
   let start = s:GetOffset("'<")
   let end = s:GetOffset("'>")
-  call s:ExpandObject(start, end)
-endfunction
-
-function! s:ExpandObject(start, end)
-  let cmd = s:jsrf_path." expand-object ".a:start." ".a:end
-  let output = system(cmd, getline(1, line("$")))
-  if output =~ "Error: Cannot find module '../lib/cli'"
-    echoerr "You must initialize vim-jsrf by running 'npm install'!"
-    return
-  endif
-
-  try
-    let changes = json_decode(output)
-  catch /^Vim\%((\a\+)\)\=:E474/
-    echoerr "Cannot extract variable from this point"
-    return
-  endtry
-
-  let pos = getcurpos()
-
-  call s:ApplyChange(changes[0])
-  let pos[1] = changes[0].line[0]
-  let pos[4] = changes[0].line[0]
-  let pos[2] = changes[0].column[0] + 1
-
-  call setpos('.', pos)
+  call s:Jsrf("expand-object", start, end, '')
 endfunction
 
 function! jsrf#ExtractVariableAtCursor(...)
@@ -49,7 +24,12 @@ function! jsrf#ExtractVariableAtCursor(...)
     let variable_name = input('Variable name: ')
     call inputrestore()
   endif
-  call s:ExtractVariable(start, end, variable_name)
+
+  if variable_name ==# ''
+    return
+  endif
+
+  call s:Jsrf("extract-variable", start, end, variable_name)
 endfunction
 
 function! jsrf#ExtractVariableInRange(...)
@@ -62,21 +42,16 @@ function! jsrf#ExtractVariableInRange(...)
     let variable_name = input('Variable name: ')
     call inputrestore()
   endif
-  call s:ExtractVariable(start, end, variable_name)
-endfunction
 
-function! s:GetOffset(expr)
-  " 0 offset (row - 1, col - 1)
-  return line2byte(line(a:expr)) + col(a:expr) - 2
-endfunction
-
-function! s:ExtractVariable(start, end, variable_name)
-  " Invalid/empty variable name provided.
-  if a:variable_name ==# ''
+  if variable_name ==# ''
     return
   endif
 
-  let cmd = s:jsrf_path." extract-variable ".a:start." ".a:end." ".a:variable_name
+  call s:Jsrf("extract-variable", start, end, variable_name)
+endfunction
+
+function! s:Jsrf(action, start, end, params)
+  let cmd = s:jsrf_path." ".a:action." ".a:start." ".a:end." ".a:params
   let output = system(cmd, getline(1, line("$")))
   if output =~ "Error: Cannot find module '../lib/cli'"
     echoerr "You must initialize vim-jsrf by running 'npm install'!"
@@ -86,7 +61,13 @@ function! s:ExtractVariable(start, end, variable_name)
   try
     let changes = json_decode(output)
   catch /^Vim\%((\a\+)\)\=:E474/
-    echoerr "Cannot extract variable from this point"
+    if a:action ==# "extract-variable"
+      echoerr "Cannot extract variable from this point"
+    elseif a:action ==# "expand-object"
+      echoerr "Cannot extract variable from this point"
+    else
+      echoerr "Error while performing action: ".a:action
+    endif
     return
   endtry
 
@@ -99,6 +80,11 @@ function! s:ExtractVariable(start, end, variable_name)
   endfor
 
   call setpos('.', new_pos)
+endfunction
+
+function! s:GetOffset(expr)
+  " 0 offset (row - 1, col - 1)
+  return line2byte(line(a:expr)) + col(a:expr) - 2
 endfunction
 
 function! s:ApplyChange(change)
@@ -153,5 +139,4 @@ endfunction
 function! s:CountLines(str)
   return len(split(a:str, "\n"))-1
 endfunction
-
 
