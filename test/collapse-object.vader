@@ -1,0 +1,34 @@
+# Test case
+Before (setup mapping):
+  let g:jsrf_map_leader = '\jsr'
+  source after/ftplugin/javascript.vim
+  nnoremap <buffer> \rc :CollapseObjectAtCursor<cr>
+  vnoremap <buffer> \rc :<c-u>CollapseObjectInRange<cr>
+
+Given javascript (variable definition with object literal on multiple lines):
+  const foo = {
+    a: 1,
+    b: 2
+  }
+
+Do (run collapse object on {):
+  f{\rc
+
+Expect javascript (object literal on a single line):
+  const foo = { a: 1, b: 2 }
+
+Given javascript (object literal inside function):
+  function x() {
+    const foo = {
+      a: 1
+    }
+  }
+
+Do (run collapse object on {):
+  jf{\rc
+
+Expect javascript:
+  function x() {
+    const foo = { a: 1 }
+  }
+

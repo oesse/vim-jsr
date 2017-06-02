@@ -14,6 +14,18 @@ function! jsrf#ExpandObjectInRange(...)
   call s:Jsrf("expand-object", start, end, '')
 endfunction
 
+function! jsrf#CollapseObjectAtCursor(...)
+  let start = s:GetOffset('.')
+  let end = start
+  call s:Jsrf("collapse-object", start, end, '')
+endfunction
+
+function! jsrf#CollapseObjectInRange(...)
+  let start = s:GetOffset("'<")
+  let end = s:GetOffset("'>")
+  call s:Jsrf("collapse-object", start, end, '')
+endfunction
+
 function! jsrf#ExtractVariableAtCursor(...)
   let start = s:GetOffset('.')
   let end = start
@@ -64,7 +76,9 @@ function! s:Jsrf(action, start, end, params)
     if a:action ==# "extract-variable"
       echoerr "Cannot extract variable from this point"
     elseif a:action ==# "expand-object"
-      echoerr "Cannot extract variable from this point"
+      echoerr "Cannot expand object from this point"
+    elseif a:action ==# "collapse-object"
+      echoerr "Cannot collapse object from this point"
     else
       echoerr "Error while performing action: ".a:action
     endif
