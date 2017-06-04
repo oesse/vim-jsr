@@ -18,9 +18,9 @@ bluebird@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
 
-jsrf@^1.0.0-alpha.2:
-  version "1.0.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/jsrf/-/jsrf-1.0.0-alpha.2.tgz#77a0e0693f55f1922efbc6963f03fe4e48109d74"
+jsrf@^1.0.0-alpha.3:
+  version "1.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/jsrf/-/jsrf-1.0.0-alpha.3.tgz#92d6a7cbc444504023faddbcf4949db44c4ee012"
   dependencies:
     acorn "^5.0.3"
     acorn-es7-plugin "^1.1.7"

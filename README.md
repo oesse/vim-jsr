@@ -7,7 +7,7 @@ Refactorings for javascript in vim.
 
 Requirements:
 * Vim 8 or NeoVim v0.2.0
-* Node 6
+* Node 5
 
 ###### with [vim-plug](https://github.com/junegunn/vim-plug)
 ```vim
@@ -22,15 +22,15 @@ cd vim-jsrf && npm install
 
 ### Usage
 
-In a javascript file use `<leader>rv` to extract the expression under the cursor into a variable. In visual mode a range can be selected to be extracted.
+In a javascript file use `<leader>r` as the prefix for refactoring commands in normal and visual mode. Available refactorings:
 
-Example:
-```javascript
-// before:
-veryImportantWork(some, expression + args)
-//                         cursor  ^
-// after :
-const foo = expression + args
-veryImportantWork(some, foo)
+| default mapping | name | description |
+| --- | --- | --- |
+| `<leader>rv` | extract variable | Extract the expression under the cursor to new const variable |
+| `<leader>re` | expand object    | Put each property of object literal on a line of its own |
+| `<leader>rc` | collapse object  | Put the object literal on a single line |
+
+You can change the refactorings prefix in your vimrc:
+```vim
+let g:jsrf_map_leader = '\'
 ```
-
