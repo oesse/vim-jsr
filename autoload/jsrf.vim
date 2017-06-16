@@ -5,25 +5,25 @@ let s:jsrf_path = s:plugin_path . '/node_modules/.bin/jsrf'
 function! jsrf#ExpandObjectAtCursor(...)
   let start = s:GetOffset('.')
   let end = start
-  call s:Jsrf("expand-object", start, end, '')
+  call s:Jsrf("expand", start, end, '')
 endfunction
 
 function! jsrf#ExpandObjectInRange(...)
   let start = s:GetOffset("'<")
   let end = s:GetOffset("'>")
-  call s:Jsrf("expand-object", start, end, '')
+  call s:Jsrf("expand", start, end, '')
 endfunction
 
 function! jsrf#CollapseObjectAtCursor(...)
   let start = s:GetOffset('.')
   let end = start
-  call s:Jsrf("collapse-object", start, end, '')
+  call s:Jsrf("collapse", start, end, '')
 endfunction
 
 function! jsrf#CollapseObjectInRange(...)
   let start = s:GetOffset("'<")
   let end = s:GetOffset("'>")
-  call s:Jsrf("collapse-object", start, end, '')
+  call s:Jsrf("collapse", start, end, '')
 endfunction
 
 function! jsrf#ExtractVariableAtCursor(...)
