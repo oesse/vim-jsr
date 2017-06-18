@@ -75,9 +75,9 @@ function! s:Jsrf(action, start, end, params)
   catch /^Vim\%((\a\+)\)\=:E474/
     if a:action ==# "extract-variable"
       echoerr "Cannot extract variable from this point"
-    elseif a:action ==# "expand-object"
+    elseif a:action ==# "expand"
       echoerr "Cannot expand object from this point"
-    elseif a:action ==# "collapse-object"
+    elseif a:action ==# "collapse"
       echoerr "Cannot collapse object from this point"
     else
       echoerr "Error while performing action: ".a:action
