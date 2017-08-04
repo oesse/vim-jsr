@@ -6,6 +6,12 @@ acorn-es7-plugin@^1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/acorn-es7-plugin/-/acorn-es7-plugin-1.1.7.tgz#f2ee1f3228a90eead1245f9ab1922eb2e71d336b"
 
+acorn-jsx@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-4.0.1.tgz#ada5a01573727a237774ce625564d079ec9de12a"
+  dependencies:
+    acorn "^5.0.3"
+
 acorn-object-spread@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/acorn-object-spread/-/acorn-object-spread-1.0.0.tgz#48ead0f4a8eb16995a17a0db9ffc6acaada4ba68"
@@ -28,12 +34,13 @@ bluebird@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
 
-jsrf@1.0.0-alpha.6:
-  version "1.0.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/jsrf/-/jsrf-1.0.0-alpha.6.tgz#f207e035d4a01e38904faf37d3f9c5a646b4cb97"
+jsrf@^1.0.0-alpha.7:
+  version "1.0.0-alpha.7"
+  resolved "https://registry.yarnpkg.com/jsrf/-/jsrf-1.0.0-alpha.7.tgz#2fc779ceeaa0ca922528c7734a56b97fb1b1ca55"
   dependencies:
     acorn "^5.0.3"
     acorn-es7-plugin "^1.1.7"
+    acorn-jsx "^4.0.1"
     acorn-object-spread "^1.0.0"
     babel-regenerator-runtime "^6.5.0"
     bluebird "^3.5.0"
