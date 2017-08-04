@@ -2,6 +2,10 @@ let s:this_file = expand('<sfile>:p')
 let s:plugin_path = resolve(expand('<sfile>:p:h:h'))
 let s:jsrf_path = s:plugin_path . '/node_modules/.bin/jsrf'
 
+if !exists('g:jsrf_debug')
+  let g:jsrf_debug = 0
+endif
+
 function! jsrf#ExpandObjectAtCursor(...)
   let start = s:GetOffset('.')
   let end = start
@@ -73,6 +77,12 @@ function! s:Jsrf(action, start, end, params)
   try
     let changes = json_decode(output)
   catch /^Vim\%((\a\+)\)\=:E474/
+    if g:jsrf_debug
+      echom "json_decode failed. jsrf output:"
+      echom output
+      return
+    endif
+
     if a:action ==# "extract-variable"
       echoerr "Cannot extract variable from this point"
     elseif a:action ==# "expand"
