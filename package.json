@@ -6,6 +6,6 @@
   "license": "ISC",
   "repository": "oesse/vim-jsrf",
   "dependencies": {
-    "jsrf": "^1.0.0-alpha.7"
+    "jsrf": "1.0.0-alpha.8"
   }
 }
